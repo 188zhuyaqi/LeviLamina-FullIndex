@@ -7,19 +7,18 @@
 namespace fullindex::providers {
 
 bool RuntimeProvider::available() const {
-    return ll::service::getLevel() != nullptr;
+    return ll::service::getLevel().has_value();
 }
 
 std::vector<model::PlayerRecord> RuntimeProvider::listPlayers() {
     std::vector<model::PlayerRecord> result;
 
-    auto* level = ll::service::getLevel();
-    if (level == nullptr) {
+    auto level = ll::service::getLevel();
+    if (!level) {
         return result;
     }
 
-    // v26.10.11 已确认 Level 存在 forEachPlayer。
-    // 首个可编译版本只读取稳定的玩家基础字段；
+    // v26.10.11: getLevel() 返回 optional_ref<Level>，已加载对象以 Runtime 为权威源。
     // Inventory / Armor / EnderChest 在下一步逐项按 v26.10.11 头文件补齐。
     level->forEachPlayer([&](Player& player) -> bool {
         model::PlayerRecord record;
