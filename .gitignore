@@ -1,0 +1,16 @@
+.vscode/
+.idea/
+.xmake/
+bin/
+build/
+compile_commands.json
+node_modules/
+web/dist/
+server/data/
+*.pdb
+*.ilk
+*.obj
+*.dll
+*.zip
+.env
+.DS_Store

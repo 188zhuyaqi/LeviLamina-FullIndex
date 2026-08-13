@@ -1,0 +1,15 @@
+{
+  "name": "levilamina-fullindex",
+  "private": true,
+  "version": "0.1.0-dev",
+  "workspaces": [
+    "server",
+    "web"
+  ],
+  "scripts": {
+    "dev:server": "npm --workspace server run dev",
+    "dev:web": "npm --workspace web run dev",
+    "build:web": "npm --workspace web run build",
+    "start:server": "npm --workspace server run start"
+  }
+}
