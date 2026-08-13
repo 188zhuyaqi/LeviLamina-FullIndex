@@ -1,0 +1,56 @@
+name: Build
+
+on:
+  workflow_call:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  plugin:
+    name: Plugin DLL
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: xmake-io/github-action-setup-xmake@v1
+
+      - uses: actions/cache@v6
+        with:
+          path: ~/AppData/Local/.xmake
+          key: xmake-${{ runner.os }}-${{ hashFiles('xmake.lua') }}
+          restore-keys: xmake-${{ runner.os }}-
+
+      - run: xmake repo -u
+
+      - run: xmake f -a x64 -m release -p windows -v --target_type=server -y
+
+      - run: xmake -v -y
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: FullIndex-plugin-${{ github.sha }}
+          path: bin/
+
+  web:
+    name: Web + Gateway
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - run: npm install
+      - run: npm run build:web
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: FullIndex-web-${{ github.sha }}
+          path: |
+            web/dist/
+            server/
+            package.json
+            package-lock.json
