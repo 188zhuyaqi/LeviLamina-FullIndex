@@ -3,6 +3,8 @@ import crypto from 'node:crypto'
 const plugins = new Map()
 const browsers = new Set()
 const pending = new Map()
+const pluginMessageListeners = new Set()
+const pluginStatusListeners = new Set()
 
 export function registerPlugin(serverId, socket) {
   const previous = plugins.get(serverId)
@@ -11,6 +13,7 @@ export function registerPlugin(serverId, socket) {
   }
 
   plugins.set(serverId, socket)
+  for (const listener of pluginStatusListeners) listener({ serverId, online: true })
   broadcast({
     type: 'server.status',
     serverId,
@@ -21,6 +24,7 @@ export function registerPlugin(serverId, socket) {
   socket.on('close', () => {
     if (plugins.get(serverId) === socket) {
       plugins.delete(serverId)
+      for (const listener of pluginStatusListeners) listener({ serverId, online: false })
       broadcast({
         type: 'server.status',
         serverId,
@@ -41,6 +45,21 @@ export function broadcast(message) {
   for (const socket of browsers) {
     if (socket.readyState === 1) socket.send(text)
   }
+}
+
+export function onPluginMessage(listener) {
+  pluginMessageListeners.add(listener)
+  return () => pluginMessageListeners.delete(listener)
+}
+
+export function onPluginStatus(listener) {
+  pluginStatusListeners.add(listener)
+  return () => pluginStatusListeners.delete(listener)
+}
+
+export function pluginOnline(serverId = 'default') {
+  const socket = plugins.get(serverId)
+  return Boolean(socket && socket.readyState === 1)
 }
 
 export function listServers() {
@@ -65,10 +84,12 @@ export function handlePluginMessage(serverId, raw) {
     }
   }
 
-  broadcast({ ...message, serverId })
+  const enriched = { ...message, serverId }
+  for (const listener of pluginMessageListeners) listener(enriched)
+  if (!message.type?.startsWith('live.query.') && !message.type?.startsWith('index.')) broadcast(enriched)
 }
 
-export function requestPlugin(serverId, action, params = {}, timeoutMs = 8000) {
+export function requestPlugin(serverId, action, params = {}, timeoutMs = 30000) {
   const socket = plugins.get(serverId)
   if (!socket || socket.readyState !== 1) {
     return Promise.reject(new Error(`server ${serverId} is offline`))

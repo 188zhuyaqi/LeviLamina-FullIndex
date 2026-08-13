@@ -1,6 +1,9 @@
 #pragma once
 
+#include "providers/ContainerQuery.h"
 #include "providers/IDataProvider.h"
+
+#include <unordered_set>
 
 namespace fullindex::providers {
 
@@ -11,10 +14,16 @@ public:
     [[nodiscard]] std::string_view name() const override { return "storage"; }
     [[nodiscard]] bool available() const override;
 
-    std::vector<model::PlayerRecord> listPlayers() override;
-    std::vector<model::DropRecord> listDrops() override;
-    std::vector<model::EntityRecord> listEntities() override;
-    std::vector<model::ContainerRecord> listContainers() override;
+    std::vector<model::PlayerRecord> listPlayers(CancelCheck const& shouldCancel = {}) override;
+    std::vector<model::DropRecord> listDrops(CancelCheck const& shouldCancel = {}) override;
+    std::vector<model::EntityRecord> listEntities(CancelCheck const& shouldCancel = {}) override;
+    std::vector<model::ContainerRecord> listContainers(CancelCheck const& shouldCancel = {}) override;
+
+    std::vector<model::ContainerRecord> listContainers(
+        ContainerQuery const& query,
+        std::unordered_set<std::string> const& excludedChunks,
+        CancelCheck const& shouldCancel = {}
+    );
 };
 
 } // namespace fullindex::providers

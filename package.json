@@ -10,6 +10,11 @@
     "dev:server": "npm --workspace server run dev",
     "dev:web": "npm --workspace web run dev",
     "build:web": "npm --workspace web run build",
+    "build:release": "node scripts/build-release.mjs",
+    "test:server": "npm --workspace server run test",
     "start:server": "npm --workspace server run start"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
   }
 }

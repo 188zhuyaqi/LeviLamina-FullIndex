@@ -43,7 +43,6 @@ target("FullIndex")
             "-Wno-pragma-system-header-outside-header",
             {tools = {"clang_cl"}}
         )
-        set_toolchains("clang-cl")
     end
 
     add_packages("levilamina", "nlohmann_json", "ixwebsocket")

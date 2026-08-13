@@ -29,9 +29,12 @@ struct ItemRecord {
 };
 
 struct PlayerRecord {
+    std::string source;
     std::string name;
+    std::string realName;
     std::string xuid;
     std::string uuid;
+    std::vector<std::string> storageIds;
     bool online{};
     std::string dimension;
     Vec3Record position;
@@ -43,7 +46,9 @@ struct PlayerRecord {
 };
 
 struct EntityRecord {
+    std::string source;
     std::string typeName;
+    std::string customName;
     std::string category;
     std::string dimension;
     Vec3Record position;
@@ -52,6 +57,7 @@ struct EntityRecord {
 };
 
 struct DropRecord {
+    std::string source;
     std::string itemId;
     std::string displayName;
     std::int32_t stackCount{};
@@ -62,6 +68,7 @@ struct DropRecord {
 };
 
 struct ContainerRecord {
+    std::string source;
     std::string kind;
     std::string dimension;
     Vec3Record position;

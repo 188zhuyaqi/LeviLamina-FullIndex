@@ -43,9 +43,12 @@ inline nlohmann::json playerToJson(model::PlayerRecord const& p) {
     }
 
     return {
+        {"source", p.source},
         {"name", p.name},
+        {"realName", p.realName},
         {"xuid", p.xuid},
         {"uuid", p.uuid},
+        {"storageIds", p.storageIds},
         {"online", p.online},
         {"dimension", p.dimension},
         {"position", {{"x", p.position.x}, {"y", p.position.y}, {"z", p.position.z}}},
@@ -59,7 +62,9 @@ inline nlohmann::json playerToJson(model::PlayerRecord const& p) {
 
 inline nlohmann::json entityToJson(model::EntityRecord const& e) {
     return {
+        {"source", e.source},
         {"typeName", e.typeName},
+        {"customName", e.customName},
         {"category", e.category},
         {"dimension", e.dimension},
         {"position", {{"x", e.position.x}, {"y", e.position.y}, {"z", e.position.z}}},
@@ -70,6 +75,7 @@ inline nlohmann::json entityToJson(model::EntityRecord const& e) {
 
 inline nlohmann::json dropToJson(model::DropRecord const& d) {
     return {
+        {"source", d.source},
         {"itemId", d.itemId},
         {"displayName", d.displayName},
         {"stackCount", d.stackCount},
@@ -77,6 +83,25 @@ inline nlohmann::json dropToJson(model::DropRecord const& d) {
         {"position", {{"x", d.position.x}, {"y", d.position.y}, {"z", d.position.z}}},
         {"chunkX", d.chunkX},
         {"chunkZ", d.chunkZ},
+    };
+}
+
+inline nlohmann::json containerToJson(model::ContainerRecord const& c) {
+    std::int64_t itemCount = 0;
+    for (auto const& item : c.items) {
+        itemCount += item.count;
+    }
+
+    return {
+        {"source", c.source},
+        {"kind", c.kind},
+        {"dimension", c.dimension},
+        {"position", {{"x", c.position.x}, {"y", c.position.y}, {"z", c.position.z}}},
+        {"chunkX", c.chunkX},
+        {"chunkZ", c.chunkZ},
+        {"occupiedSlots", c.items.size()},
+        {"itemCount", itemCount},
+        {"items", itemsToJson(c.items)},
     };
 }
 

@@ -8,7 +8,10 @@ defineProps({
 <template>
   <header class="page-header">
     <div>
-      <h1>{{ title }}</h1>
+      <div class="page-title-row">
+        <h1>{{ title }}</h1>
+        <slot name="title-extra" />
+      </div>
       <p>{{ description }}</p>
     </div>
     <slot />

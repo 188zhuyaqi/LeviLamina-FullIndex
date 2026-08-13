@@ -1,16 +1,87 @@
+# 编辑器与 IDE
 .vscode/
 .idea/
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.vcxproj.user
+
+# Xmake / CMake / C++ 编译产物
 .xmake/
+.tools/
 bin/
 build/
+out/
+cmake-build-*/
 compile_commands.json
-node_modules/
-web/dist/
-server/data/
+CMakeUserPresets.json
+*.obj
+*.o
 *.pdb
 *.ilk
-*.obj
+*.idb
+*.iobj
+*.ipdb
+*.tlog
+*.lastbuildstate
+*.lib
+*.exp
 *.dll
+
+# Node.js / Vite / 测试产物
+node_modules/
+web/dist/
+coverage/
+.nyc_output/
+.vite/
+.cache/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 本地发布产物
+release/
 *.zip
+*.tgz
+
+# 运行数据（SQLite 快照及其 WAL/SHM 文件）
+server/data/
+*.sqlite
+*.sqlite3
+*.db
+*.sqlite-journal
+*.sqlite3-journal
+*.db-journal
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite3-wal
+*.sqlite3-shm
+*.db-wal
+*.db-shm
+
+# 本地配置和机密信息；示例配置允许提交
 .env
+.env.*
+!.env.example
+!.env.*.example
+
+# 日志、崩溃转储与临时文件
+*.log
+*.dmp
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+
+# 操作系统文件
 .DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/

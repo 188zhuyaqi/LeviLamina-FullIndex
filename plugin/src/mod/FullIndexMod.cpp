@@ -22,6 +22,8 @@ bool FullIndexMod::load() {
         logger.warn("pluginToken is still CHANGE_ME. Set a strong token before exposing the gateway.");
     }
 
+    mIndexService.configure(mConfig.enableRuntimeProvider, mConfig.enableStorageProvider);
+
     return true;
 }
 

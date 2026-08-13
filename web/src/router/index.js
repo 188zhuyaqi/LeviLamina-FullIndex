@@ -5,6 +5,8 @@ import PlayersView from '../views/PlayersView.vue'
 import ContainersView from '../views/ContainersView.vue'
 import DropsView from '../views/DropsView.vue'
 import EntitiesView from '../views/EntitiesView.vue'
+import SearchView from '../views/SearchView.vue'
+import SnapshotsView from '../views/SnapshotsView.vue'
 
 export default createRouter({
   history: createWebHistory(),
@@ -13,6 +15,8 @@ export default createRouter({
     { path: '/players', component: PlayersView },
     { path: '/containers', component: ContainersView },
     { path: '/drops', component: DropsView },
-    { path: '/entities', component: EntitiesView }
+    { path: '/entities', component: EntitiesView },
+    { path: '/search', component: SearchView },
+    { path: '/snapshots', component: SnapshotsView }
   ]
 })
