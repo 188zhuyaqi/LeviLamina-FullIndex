@@ -92,6 +92,13 @@ npm run dev:web
 - 插件 WS: `ws://127.0.0.1:30110/ws/plugin`
 - 浏览器 WS: `ws://127.0.0.1:30110/ws/browser`
 
+## GitHub Actions
+
+每次推送到 `main` 会同时验证：
+- Windows x64 LeviLamina 插件构建，并上传 `bin/` Artifact
+- Vue Web 构建与 Node 网关打包
+- 推送 `v*` 标签时生成 Release 压缩包
+
 ## 安全
 
 插件 WS 通过 `pluginToken` 做基础鉴权。生产环境应：
