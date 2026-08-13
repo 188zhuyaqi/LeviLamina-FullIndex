@@ -17,7 +17,7 @@ nlohmann::json IndexService::execute(
             {"storage", mStorage.available()},
             {"features", {
                 {"players", true},
-                {"playerInventory", false},
+                {"playerInventory", true},
                 {"containers", false},
                 {"drops", false},
                 {"entities", false},

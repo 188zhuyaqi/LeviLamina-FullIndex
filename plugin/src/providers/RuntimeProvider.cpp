@@ -1,10 +1,37 @@
 #include "providers/RuntimeProvider.h"
 
+#include "serialization/ItemSerializer.h"
+
 #include <ll/api/service/Bedrock.h>
+#include <mc/deps/shared_types/legacy/EquipmentSlot.h>
+#include <mc/platform/UUID.h>
+#include <mc/world/Container.h>
+#include <mc/world/actor/player/Inventory.h>
 #include <mc/world/actor/player/Player.h>
+#include <mc/world/item/ItemStack.h>
 #include <mc/world/level/Level.h>
 
+#include <array>
+#include <string>
+#include <utility>
+
 namespace fullindex::providers {
+namespace {
+
+std::string dimensionName(DimensionType dimension) {
+    switch (dimension.id) {
+    case 0:
+        return "overworld";
+    case 1:
+        return "nether";
+    case 2:
+        return "the_end";
+    default:
+        return "dimension:" + std::to_string(dimension.id);
+    }
+}
+
+} // namespace
 
 bool RuntimeProvider::available() const {
     return ll::service::getLevel().has_value();
@@ -18,16 +45,53 @@ std::vector<model::PlayerRecord> RuntimeProvider::listPlayers() {
         return result;
     }
 
-    // v26.10.11: getLevel() 返回 optional_ref<Level>，已加载对象以 Runtime 为权威源。
-    // Inventory / Armor / EnderChest 在下一步逐项按 v26.10.11 头文件补齐。
     level->forEachPlayer([&](Player& player) -> bool {
         model::PlayerRecord record;
         record.name = player.getRealName();
         record.xuid = player.getXuid();
+        record.uuid = player.getUuid().asString();
         record.online = true;
+        record.dimension = dimensionName(player.getDimensionId());
+        record.selectedSlot = player.getSelectedItemSlot();
 
         auto const& pos = player.getPosition();
         record.position = {pos.x, pos.y, pos.z};
+
+        record.inventory = serialization::serializeContainer(player.getInventory());
+        for (auto& item : record.inventory) {
+            if (item.slot >= 0 && item.slot <= 8) {
+                item.slotName = item.slot == record.selectedSlot ? "hotbar:selected" : "hotbar";
+            } else {
+                item.slotName = "inventory";
+            }
+        }
+
+        using Slot = SharedTypes::Legacy::EquipmentSlot;
+        constexpr std::array<std::pair<Slot, char const*>, 4> kArmorSlots{{
+            {Slot::Head, "head"},
+            {Slot::Torso, "chest"},
+            {Slot::Legs, "legs"},
+            {Slot::Feet, "feet"},
+        }};
+
+        for (auto const& [slot, name] : kArmorSlots) {
+            auto const& stack = player.getItemSlot(slot);
+            if (!stack.isNull()) {
+                record.armor.emplace_back(serialization::serializeItem(stack, -1, name));
+            }
+        }
+
+        auto const& offhand = player.getItemSlot(Slot::Offhand);
+        if (!offhand.isNull()) {
+            record.offhand = serialization::serializeItem(offhand, -1, "offhand");
+        }
+
+        if (auto enderChest = player.getEnderChestContainer()) {
+            record.enderChest = serialization::serializeContainer(*enderChest);
+            for (auto& item : record.enderChest) {
+                item.slotName = "ender_chest";
+            }
+        }
 
         result.emplace_back(std::move(record));
         return true;
