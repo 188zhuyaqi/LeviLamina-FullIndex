@@ -10,7 +10,10 @@ on:
 jobs:
   plugin:
     name: Plugin DLL
-    runs-on: windows-latest
+    # LeviLamina 26.10.x dependency recipes are currently unstable on the
+    # windows-latest image selecting VS 2026. Pin VS 2022 until upstream
+    # dependency packages fully support the newer toolchain.
+    runs-on: windows-2022
     steps:
       - uses: actions/checkout@v7
 
@@ -19,8 +22,8 @@ jobs:
       - uses: actions/cache@v6
         with:
           path: ~/AppData/Local/.xmake
-          key: xmake-${{ runner.os }}-${{ hashFiles('xmake.lua') }}
-          restore-keys: xmake-${{ runner.os }}-
+          key: xmake-windows2022-vs17-${{ hashFiles('xmake.lua') }}
+          restore-keys: xmake-windows2022-vs17-
 
       - run: xmake repo -u
 
