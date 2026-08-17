@@ -68,6 +68,36 @@ Plugin -> Node
 }
 ```
 
+## 物品数据
+
+玩家、容器以及嵌套容器物品使用同一物品结构。附魔同时保留稳定 ID、数值等级、罗马数字等级文本和
+游戏 API 返回的原始文本；`lore`、名称和自定义名称中的 `§` 格式码由 Web 渲染，协议不提前移除。
+
+```json
+{
+  "id": "minecraft:diamond_sword",
+  "displayName": "钻石剑",
+  "customName": "§r§6王者之刃",
+  "count": 1,
+  "damage": 12,
+  "enchanted": true,
+  "enchantments": [
+    {
+      "type": 9,
+      "id": "minecraft:sharpness",
+      "gameText": "Sharpness V",
+      "level": 5,
+      "levelText": "V"
+    }
+  ],
+  "lore": ["§r§7来自古老王国"],
+  "children": []
+}
+```
+
+Node 不为附魔另建关系表，完整物品结构保存在 `items.detail_json`，所以旧快照保持兼容；重新构建的
+快照和实时查询才会包含新增的 `enchantments` 数组。
+
 ## 查询 Action
 
 - `system.capabilities`

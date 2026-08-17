@@ -13,6 +13,14 @@ struct Vec3Record {
     float z{};
 };
 
+struct EnchantmentRecord {
+    std::int32_t type{};
+    std::string id;
+    std::string gameText;
+    std::int32_t level{};
+    std::string levelText;
+};
+
 struct ItemRecord {
     std::int32_t slot{-1};
     std::string slotName;
@@ -25,6 +33,7 @@ struct ItemRecord {
     bool hasContainerData{};
     std::string customName;
     std::vector<std::string> lore;
+    std::vector<EnchantmentRecord> enchantments;
     std::vector<ItemRecord> children;
 };
 

@@ -12,6 +12,7 @@
     "build:web": "npm --workspace web run build",
     "build:release": "node scripts/build-release.mjs",
     "test:server": "npm --workspace server run test",
+    "test:web": "npm --workspace web run test",
     "start:server": "npm --workspace server run start"
   },
   "devDependencies": {

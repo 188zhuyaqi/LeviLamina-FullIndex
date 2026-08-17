@@ -28,6 +28,10 @@ function datasets(diamondCount) {
           displayName: 'Diamond',
           count: diamondCount,
           enchanted: true,
+          enchantments: [{
+            type: 9, id: 'minecraft:sharpness', gameText: 'Sharpness V', level: 5, levelText: 'V'
+          }],
+          lore: ['§r§6索引测试'],
           damage: 2,
           children: []
         }]
@@ -71,6 +75,9 @@ test('SQLite snapshots index nested items and calculate diffs', () => {
     assert.equal(filtered.items[0].item_id, 'minecraft:diamond')
     assert.equal(filtered.items[0].enchanted, 1)
     assert.equal(filtered.items[0].damage, 2)
+    assert.equal(filtered.items[0].detail.enchantments[0].id, 'minecraft:sharpness')
+    assert.equal(filtered.items[0].detail.enchantments[0].levelText, 'V')
+    assert.deepEqual(filtered.items[0].detail.lore, ['§r§6索引测试'])
 
     const diff = store.diff(first.id, second.id)
     const diamonds = diff.items.find(item => item.itemId === 'minecraft:diamond')

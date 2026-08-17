@@ -43,7 +43,9 @@ test('item search API forwards every combined filter', async () => {
       dimension: 'overworld', position: { x: 100, y: 64, z: -100 },
       inventory: [{
         slot: 0, slotName: 'hotbar', id: 'minecraft:diamond_sword', displayName: 'Diamond Sword',
-        customName: 'Search Sentinel', count: 1, damage: 7, enchanted: true, children: []
+        customName: '§r§6Search Sentinel', count: 1, damage: 7, enchanted: true,
+        enchantments: [{ type: 9, id: 'minecraft:sharpness', gameText: 'Sharpness V', level: 5, levelText: 'V' }],
+        lore: ['§r§6API Lore'], children: []
       }],
       armor: [], offhand: null, enderChest: []
     }],
@@ -90,6 +92,8 @@ test('item search API forwards every combined filter', async () => {
     })
     assert.equal(exact.total, 1)
     assert.equal(exact.items[0].item_id, 'minecraft:diamond_sword')
+    assert.equal(exact.items[0].detail.enchantments[0].levelText, 'V')
+    assert.deepEqual(exact.items[0].detail.lore, ['§r§6API Lore'])
 
     const wrongDimension = await request({
       typeId: 'minecraft:diamond_sword', name: 'sentinel', sourceType: 'player', dimension: 'nether'

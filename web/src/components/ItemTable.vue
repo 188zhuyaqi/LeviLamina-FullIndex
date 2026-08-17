@@ -1,6 +1,8 @@
 <script setup>
 import { computed } from 'vue'
 import { slotLabel } from '../i18n/index.js'
+import ItemDetailsPopover from './ItemDetailsPopover.vue'
+import MinecraftText from './MinecraftText.vue'
 
 const props = defineProps({
   items: { type: Array, default: () => [] },
@@ -33,14 +35,16 @@ const rows = computed(() => {
       </template>
     </el-table-column>
     <el-table-column prop="id" label="物品 ID" min-width="210" />
-    <el-table-column prop="displayName" label="名称" min-width="150" />
+    <el-table-column label="名称" min-width="150">
+      <template #default="{ row }">
+        <MinecraftText :text="row.displayName" />
+      </template>
+    </el-table-column>
     <el-table-column prop="count" label="数量" width="78" />
     <el-table-column prop="damage" label="损耗" width="78" />
-    <el-table-column label="属性" min-width="150">
+    <el-table-column label="更多信息" width="110">
       <template #default="{ row }">
-        <el-tag v-if="row.enchanted" size="small" type="warning">附魔</el-tag>
-        <el-tag v-if="row.hasContainerData" size="small" type="info">含容器</el-tag>
-        <span v-if="row.customName"> {{ row.customName }}</span>
+        <ItemDetailsPopover :item="row" />
       </template>
     </el-table-column>
   </el-table>

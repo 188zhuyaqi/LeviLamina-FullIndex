@@ -71,6 +71,50 @@ const dictionaries = {
       crafter: '合成器',
       shelf: '置物架'
     },
+    enchantment: {
+      protection: '保护',
+      fire_protection: '火焰保护',
+      feather_falling: '摔落缓冲',
+      blast_protection: '爆炸保护',
+      projectile_protection: '弹射物保护',
+      thorns: '荆棘',
+      respiration: '水下呼吸',
+      depth_strider: '深海探索者',
+      aqua_affinity: '水下速掘',
+      sharpness: '锋利',
+      smite: '亡灵杀手',
+      bane_of_arthropods: '节肢杀手',
+      knockback: '击退',
+      fire_aspect: '火焰附加',
+      looting: '抢夺',
+      efficiency: '效率',
+      silk_touch: '精准采集',
+      unbreaking: '耐久',
+      fortune: '时运',
+      power: '力量',
+      punch: '冲击',
+      flame: '火矢',
+      infinity: '无限',
+      luck_of_the_sea: '海之眷顾',
+      lure: '饵钓',
+      frost_walker: '冰霜行者',
+      mending: '经验修补',
+      binding_curse: '绑定诅咒',
+      vanishing_curse: '消失诅咒',
+      impaling: '穿刺',
+      riptide: '激流',
+      loyalty: '忠诚',
+      channeling: '引雷',
+      multishot: '多重射击',
+      piercing: '穿透',
+      quick_charge: '快速装填',
+      soul_speed: '灵魂疾行',
+      swift_sneak: '迅捷潜行',
+      wind_burst: '风爆',
+      density: '致密',
+      breach: '破甲',
+      lunge: '突进'
+    },
     entity: {
       'minecraft:allay': '悦灵',
       'minecraft:armadillo': '犰狳',
@@ -190,6 +234,19 @@ const dictionaries = {
     phase: { starting: 'Starting', accepted: 'Accepted', scanning: 'Scanning', streamed: 'Streaming', committing: 'Committing', cancelling: 'Cancelling', cancelled: 'Cancelled', complete: 'Complete', failed: 'Failed' },
     slot: {},
     container: {},
+    enchantment: {
+      protection: 'Protection', fire_protection: 'Fire Protection', feather_falling: 'Feather Falling',
+      blast_protection: 'Blast Protection', projectile_protection: 'Projectile Protection', thorns: 'Thorns',
+      respiration: 'Respiration', depth_strider: 'Depth Strider', aqua_affinity: 'Aqua Affinity',
+      sharpness: 'Sharpness', smite: 'Smite', bane_of_arthropods: 'Bane of Arthropods', knockback: 'Knockback',
+      fire_aspect: 'Fire Aspect', looting: 'Looting', efficiency: 'Efficiency', silk_touch: 'Silk Touch',
+      unbreaking: 'Unbreaking', fortune: 'Fortune', power: 'Power', punch: 'Punch', flame: 'Flame', infinity: 'Infinity',
+      luck_of_the_sea: 'Luck of the Sea', lure: 'Lure', frost_walker: 'Frost Walker', mending: 'Mending',
+      binding_curse: 'Curse of Binding', vanishing_curse: 'Curse of Vanishing', impaling: 'Impaling',
+      riptide: 'Riptide', loyalty: 'Loyalty', channeling: 'Channeling', multishot: 'Multishot', piercing: 'Piercing',
+      quick_charge: 'Quick Charge', soul_speed: 'Soul Speed', swift_sneak: 'Swift Sneak', wind_burst: 'Wind Burst',
+      density: 'Density', breach: 'Breach', lunge: 'Lunge'
+    },
     entity: {}
   }
 }
@@ -231,6 +288,10 @@ export const categoryLabel = value => translate(
 export const datasetLabel = value => translate('dataset', value)
 export const phaseLabel = (value, fallback = value) => translate('phase', value, fallback)
 export const entityLabel = value => translate('entity', value, locale.value === 'zh-CN' ? '未收录名称' : value)
+export const enchantmentLabel = value => {
+  const normalized = String(value ?? '').replace(/^minecraft:/, '')
+  return translate('enchantment', normalized, normalized.replaceAll('_', ' '))
+}
 
 export function containerLabel(value) {
   const kind = String(value ?? '')

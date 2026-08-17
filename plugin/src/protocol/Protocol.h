@@ -12,6 +12,17 @@ inline nlohmann::json itemToJson(model::ItemRecord const& item) {
         children.push_back(itemToJson(child));
     }
 
+    nlohmann::json enchantments = nlohmann::json::array();
+    for (auto const& enchantment : item.enchantments) {
+        enchantments.push_back({
+            {"type", enchantment.type},
+            {"id", enchantment.id},
+            {"gameText", enchantment.gameText},
+            {"level", enchantment.level},
+            {"levelText", enchantment.levelText},
+        });
+    }
+
     return {
         {"slot", item.slot},
         {"slotName", item.slotName},
@@ -24,6 +35,7 @@ inline nlohmann::json itemToJson(model::ItemRecord const& item) {
         {"hasContainerData", item.hasContainerData},
         {"customName", item.customName},
         {"lore", item.lore},
+        {"enchantments", std::move(enchantments)},
         {"children", std::move(children)},
     };
 }
